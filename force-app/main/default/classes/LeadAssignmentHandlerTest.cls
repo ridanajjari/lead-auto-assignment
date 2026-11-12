@@ -24,7 +24,8 @@ private class LeadAssignmentHandlerTest {
             DeveloperName        = devName,
             Industry__c          = industry,
             Country__c           = country,
-            Assigned_User_Id__c  = userId,
+            Assignee_Type__c     = 'User',
+            Assignee__c          = [SELECT Username FROM User WHERE Id = :userId].Username,
             Priority__c          = priority,
             Is_Active__c         = true
         );
