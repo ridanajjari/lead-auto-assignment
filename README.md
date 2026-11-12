@@ -144,7 +144,7 @@ The trigger runs for every Lead save whether or not the permission set is assign
 
 ## Verification
 
-Not yet verified in an org. On 2026-11-12 the available org (API 68.0) was a Base Edition trial that does not allow Apex or Custom Metadata Type deployment, so the deploy was rejected and the tests have not been run. No coverage figure is claimed. Prettier (`npm run prettier:verify`, which parses the Apex) and ESLint (`npm run lint`) pass.
+Status (2026-11-12): Apex not yet deployed or executed against an org; the Apex tests have not been run and no coverage has been measured. Checked offline: Apex parses (prettier-plugin-apex), ESLint, Prettier, and every `*-meta.xml` file is well-formed XML.
 
 ---
 
