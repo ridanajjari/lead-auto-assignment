@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Country__c</fullName>
     <label>Country</label>
-    <description>Lead Country to match. Leave blank to match any country.</description>
+    <description
+  >Lead Country to match. Leave blank to match any country.</description>
     <type>Text</type>
     <length>255</length>
     <required>false</required>

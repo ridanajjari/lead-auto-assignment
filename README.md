@@ -35,13 +35,14 @@ First matching rule wins → Lead.OwnerId updated (no DML, runs before-trigger)
 
 Rules live in `Lead_Assignment_Rule__mdt` (Custom Metadata). Admins manage them in Setup → Custom Metadata Types — no developer needed after the initial deployment.
 
-| Priority | Industry   | Country | Assigned To     |
-|----------|-----------|---------|-----------------|
-| 10       | Technology | France  | Tech France Rep |
-| 20       | Finance    | (any)   | Finance Team Rep|
-| 999      | (any)      | (any)   | Default Rep     |
+| Priority | Industry   | Country | Assigned To      |
+| -------- | ---------- | ------- | ---------------- |
+| 10       | Technology | France  | Tech France Rep  |
+| 20       | Finance    | (any)   | Finance Team Rep |
+| 999      | (any)      | (any)   | Default Rep      |
 
 **Matching logic (most specific first):**
+
 1. Industry + Country both match
 2. Only Industry matches (Country left blank = wildcard)
 3. Only Country matches (Industry left blank = wildcard)
@@ -92,16 +93,16 @@ sf apex run test --target-org my-org --test-level RunLocalTests --wait 10
 
 ## Test Coverage
 
-| Test Method | Scenario |
-|-------------|----------|
-| `testExactIndustryAndCountryMatch` | Technology + France → Tech rep |
-| `testIndustryOnlyMatch` | Finance + any country → Finance rep |
-| `testCatchAllWhenNoRuleMatches` | Unknown industry/country → default rep |
-| `testUpdateOnlyReassignsWhenIndustryOrCountryChanges` | Irrelevant field update → no reassignment |
-| `testUpdateReassignsWhenIndustryChanges` | Industry changes → new assignment |
-| `testNoRulesLeavesOwnerUntouched` | Empty rule set → owner unchanged |
-| `testBulkInsert200Leads` | 200 leads in one batch → all correctly assigned |
-| `testCaseInsensitiveMatching` | "TECHNOLOGY" matches "Technology" |
+| Test Method                                           | Scenario                                        |
+| ----------------------------------------------------- | ----------------------------------------------- |
+| `testExactIndustryAndCountryMatch`                    | Technology + France → Tech rep                  |
+| `testIndustryOnlyMatch`                               | Finance + any country → Finance rep             |
+| `testCatchAllWhenNoRuleMatches`                       | Unknown industry/country → default rep          |
+| `testUpdateOnlyReassignsWhenIndustryOrCountryChanges` | Irrelevant field update → no reassignment       |
+| `testUpdateReassignsWhenIndustryChanges`              | Industry changes → new assignment               |
+| `testNoRulesLeavesOwnerUntouched`                     | Empty rule set → owner unchanged                |
+| `testBulkInsert200Leads`                              | 200 leads in one batch → all correctly assigned |
+| `testCaseInsensitiveMatching`                         | "TECHNOLOGY" matches "Technology"               |
 
 ---
 
