@@ -151,14 +151,14 @@ The trigger runs for every Lead save whether or not the permission set is assign
   npm run lint
   npm run prettier:verify
   ```
-- ⏳ Apex test execution and coverage: still to be run in a Developer Edition org.
+- ✅ Deployed to a Developer Edition org at API 68.0 (2026-11-12); 15/15 Apex test methods passing (`sf apex run test --class-names LeadAssignmentHandlerTest --code-coverage`); coverage: LeadAssignmentHandler 93%, LeadAssignmentTrigger 100%.
 
 ---
 
 ## Known Limits
 
 - Assignee lookups run with the inserting user's sharing (`with sharing`). If that user cannot see the assignee User record, the rule is skipped.
-- The tests create three active users with a full Salesforce license; an org with fewer than three free Salesforce licenses will fail the test setup.
+- The tests create three active users with a full Salesforce license. The run above passed in an org with 2 free Salesforce licenses; an org with no free licenses was not tried.
 - Matching is on exact (case-insensitive) Industry and Country values; there is no partial or list matching.
 - Updates only re-run assignment when Industry or Country changes; a manual owner change is kept otherwise.
 
