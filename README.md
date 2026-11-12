@@ -118,7 +118,7 @@ The trigger runs for every Lead save whether or not the permission set is assign
 
 ---
 
-## Tests
+## Test Scenarios
 
 `LeadAssignmentHandlerTest` creates its own data in `@TestSetup`: three active reps, one inactive rep (all on a non-admin Salesforce-license profile that can edit Leads), a queue that supports Lead and a queue that only supports Case. Rules are injected through the `@TestVisible` `rulesOverride` field, so the tests do not depend on the org's Custom Metadata records.
 
@@ -142,9 +142,16 @@ The trigger runs for every Lead save whether or not the permission set is assign
 
 ---
 
-## Verification
+## Testing
 
-Status (2026-11-12): Apex not yet deployed or executed against an org; the Apex tests have not been run and no coverage has been measured. Checked offline: Apex parses (prettier-plugin-apex), ESLint, Prettier, and every `*-meta.xml` file is well-formed XML.
+- ✅ Apex tests written: 15 test methods in `LeadAssignmentHandlerTest` (see the table above): specificity and priority ordering, skipping of unknown, inactive and non-Lead-queue assignees, queue assignment, update behaviour, and a 200-lead bulk insert with query-count and cache assertions.
+- ✅ Offline checks passing (2026-11-12): the Apex parses (prettier-plugin-apex), ESLint, Prettier, and every `*-meta.xml` file is well-formed XML.
+  ```bash
+  npx prettier --check "force-app/**/*.{cls,trigger}"
+  npm run lint
+  npm run prettier:verify
+  ```
+- ⏳ Apex test execution and coverage: still to be run in a Developer Edition org.
 
 ---
 
