@@ -2,9 +2,14 @@
  * Handler for LeadAssignmentTrigger.
  *
  * Rules are stored in Lead_Assignment_Rule__mdt so admins can manage
- * them without a code deployment. Active rules are evaluated in Priority__c
- * order (lowest number first); the first rule whose Industry__c and
- * Country__c match the Lead (blank = wildcard, case-insensitive) sets OwnerId.
+ * them without a code deployment. A rule matches when its Industry__c and
+ * Country__c match the Lead (blank = wildcard, case-insensitive). Active
+ * rules are evaluated most specific first, and the first match sets OwnerId:
+ *   1. Industry AND Country set          (specificity 2)
+ *   2. Only Industry OR only Country set (specificity 1)
+ *   3. Neither set (catch-all)           (specificity 0)
+ * Within the same specificity, lower Priority__c wins; DeveloperName breaks
+ * any remaining tie so the order is deterministic.
  *
  * Assignees are configured by name, never by record Id:
  *   - Assignee_Type__c = 'User' (or blank): Assignee__c is a Username.
@@ -76,9 +81,10 @@ public with sharing class LeadAssignmentHandler {
     }
 
     /**
-     * Turns rules into (rule, owner Id) pairs, resolving every assignee name
-     * in bulk. Rules whose assignee cannot be resolved are dropped with a
-     * WARN debug line, so evaluation falls through to the next matching rule.
+     * Turns rules into (rule, owner Id) pairs sorted most specific first,
+     * resolving every assignee name in bulk. Rules whose assignee cannot be
+     * resolved are dropped with a WARN debug line, so evaluation falls
+     * through to the next matching rule.
      */
     private static List<ResolvedRule> resolveRules(List<Lead_Assignment_Rule__mdt> rules) {
         Set<String> usernamesToQuery = new Set<String>();
@@ -125,6 +131,7 @@ public with sharing class LeadAssignmentHandler {
             }
             resolved.add(new ResolvedRule(rule, ownerId));
         }
+        resolved.sort();
         return resolved;
     }
 
@@ -171,13 +178,37 @@ public with sharing class LeadAssignmentHandler {
         ];
     }
 
-    private class ResolvedRule {
+    private class ResolvedRule implements Comparable {
         public final Lead_Assignment_Rule__mdt rule;
         public final Id ownerId;
+        public final Integer specificity;
 
         public ResolvedRule(Lead_Assignment_Rule__mdt rule, Id ownerId) {
             this.rule = rule;
             this.ownerId = ownerId;
+            this.specificity = (String.isBlank(rule.Industry__c) ? 0 : 1) + (String.isBlank(rule.Country__c) ? 0 : 1);
+        }
+
+        // Most specific first, then lowest Priority__c (blank last), then DeveloperName.
+        public Integer compareTo(Object other) {
+            ResolvedRule that = (ResolvedRule) other;
+            if (specificity != that.specificity) {
+                return specificity > that.specificity ? -1 : 1;
+            }
+            Decimal thisPriority = rule.Priority__c;
+            Decimal thatPriority = that.rule.Priority__c;
+            if (thisPriority != thatPriority) {
+                if (thisPriority == null) {
+                    return 1;
+                }
+                if (thatPriority == null) {
+                    return -1;
+                }
+                return thisPriority < thatPriority ? -1 : 1;
+            }
+            String thisName = rule.DeveloperName == null ? '' : rule.DeveloperName;
+            String thatName = that.rule.DeveloperName == null ? '' : that.rule.DeveloperName;
+            return thisName.compareTo(thatName);
         }
 
         public Boolean matches(Lead lead) {
