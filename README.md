@@ -73,7 +73,7 @@ force-app/main/default/
 
 ```bash
 # 1. Clone and authenticate
-git clone https://github.com/YOUR_USERNAME/lead-auto-assignment.git
+git clone https://github.com/ridanajjari/lead-auto-assignment.git
 cd lead-auto-assignment
 sf org login web --alias my-org
 
