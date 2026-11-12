@@ -1,0 +1,19 @@
+{
+  "name": "lead-auto-assignment",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Rule-based Lead owner assignment driven by Custom Metadata",
+  "scripts": {
+    "lint": "eslint .",
+    "prettier": "prettier --write \"{force-app,config}/**/*.{cls,cmp,component,css,html,js,json,page,trigger,xml}\" \"*.{js,json,yaml,yml}\" README.md",
+    "prettier:verify": "prettier --check \"{force-app,config}/**/*.{cls,cmp,component,css,html,js,json,page,trigger,xml}\" \"*.{js,json,yaml,yml}\" README.md"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@prettier/plugin-xml": "^3.4.1",
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-apex": "^2.2.6"
+  }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Lead Auto-Assignment</label>
+    <description
+  >Grants access to the LeadAssignmentHandler Apex class. The Lead trigger runs regardless of this permission set; Lead_Assignment_Rule__mdt needs no grant because only Apex reads it.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <classAccesses>
+        <apexClass>LeadAssignmentHandler</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+</PermissionSet>
